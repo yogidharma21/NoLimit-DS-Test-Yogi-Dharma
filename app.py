@@ -4,27 +4,61 @@ import tensorflow as tf
 import joblib
 
 from sentence_transformers import SentenceTransformer
+from sklearn.neighbors import NearestNeighbors
 
-# Load model
-embedding_model = SentenceTransformer(
-    "intfloat/multilingual-e5-base"
-)
+# =====================
+# LOAD FILES
+# =====================
 
-model = tf.keras.models.load_model(
-    "sentiment_model.keras"
-)
+@st.cache_resource
+def load_resources():
 
-le = joblib.load(
-    "label_encoder.pkl"
-)
+    embedding_model = SentenceTransformer(
+        "intfloat/multilingual-e5-base"
+    )
 
-nn = joblib.load(
-    "nearest_neighbors.pkl"
-)
+    model = tf.keras.models.load_model(
+        "sentiment_model.keras"
+    )
 
-reviews = joblib.load(
-    "reviews.pkl"
-)
+    le = joblib.load(
+        "label_encoder.pkl"
+    )
+
+    reviews = joblib.load(
+        "reviews.pkl"
+    )
+
+    # =====================
+    # BUILD NN ON STARTUP
+    # =====================
+
+    review_emb = embedding_model.encode(
+        reviews.tolist(),
+        show_progress_bar=False
+    )
+
+    nn = NearestNeighbors(
+        n_neighbors=5,
+        metric="cosine"
+    )
+
+    nn.fit(review_emb)
+
+    return (
+        embedding_model,
+        model,
+        le,
+        reviews,
+        nn
+    )
+
+
+embedding_model, model, le, reviews, nn = load_resources()
+
+# =====================
+# UI
+# =====================
 
 st.title("DANA Sentiment Analysis")
 
@@ -32,11 +66,20 @@ text = st.text_area(
     "Masukkan Review"
 )
 
-if st.button("Predict"):
+# =====================
+# SENTIMENT
+# =====================
 
-    emb = embedding_model.encode([text])
+if st.button("Prediksi Sentimen"):
 
-    pred = model.predict(emb)
+    emb = embedding_model.encode(
+        [text]
+    )
+
+    pred = model.predict(
+        emb,
+        verbose=0
+    )
 
     label = le.inverse_transform(
         [np.argmax(pred)]
@@ -46,15 +89,26 @@ if st.button("Predict"):
         f"Prediksi Sentimen: {label}"
     )
 
-if st.button("Find Similar Reviews"):
+# =====================
+# SIMILARITY SEARCH
+# =====================
 
-    emb = embedding_model.encode([text])
+if st.button("Cari Review Mirip"):
 
-    distances, indices = nn.kneighbors(emb)
+    query_emb = embedding_model.encode(
+        [text]
+    )
 
-    st.subheader("Top Similar Reviews")
+    distances, indices = nn.kneighbors(
+        query_emb
+    )
 
-    for idx in indices[0]:
+    st.subheader(
+        "Top 5 Similar Reviews"
+    )
+
+    for i, idx in enumerate(indices[0], start=1):
+
         st.write(
-            reviews.iloc[idx]
+            f"{i}. {reviews.iloc[idx]}"
         )
