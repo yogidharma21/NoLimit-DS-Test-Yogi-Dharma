@@ -1,5 +1,7 @@
-streamlit
+gdown
 sentence-transformers
-numpy
 scikit-learn
-faiss-cpu
+streamlit
+numpy
+pandas
+joblib
