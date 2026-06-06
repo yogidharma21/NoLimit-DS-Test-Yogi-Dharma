@@ -2,6 +2,7 @@ import streamlit as st
 import numpy as np
 import joblib
 import os
+import gdown
 
 st.set_page_config(
     page_title="DANA Review Intelligence",
@@ -14,6 +15,14 @@ ARTIFACTS = {
     "knn": "nearest_neighbors.pkl",
     "sentiment_model": "sentiment_model.keras"
 }
+
+KNn_FILE = "nearest_neighbors.pkl"
+KNN_DRIVE_ID = "1S0aAwqsFzawpaMHZG8XG4Nt7JNSlfsaK"
+
+def download_knn():
+    if not os.path.exists(KNn_FILE):
+        url = f"https://drive.google.com/uc?id={KNN_DRIVE_ID}"
+        gdown.download(url, KNn_FILE, quiet=False)
 
 
 def check_file(path):
@@ -28,7 +37,8 @@ def load_embedding():
 
 @st.cache_resource
 def load_knn():
-    return joblib.load("nearest_neighbors.pkl")
+    download_knn()  # 👈 auto download sebelum load
+    return joblib.load(KNn_FILE)
 
 
 @st.cache_resource
@@ -63,13 +73,11 @@ def sentiment_fallback(text):
 
 st.title("DANA Review Intelligence System")
 
-
 text = st.text_area("Input review")
 
 emb_model = load_embedding()
 knn = load_knn()
 reviews = load_reviews()
-
 
 col1, col2 = st.columns(2)
 
