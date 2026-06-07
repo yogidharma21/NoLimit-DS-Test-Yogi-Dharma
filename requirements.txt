@@ -1,11 +1,9 @@
-pandas
+streamlit
 numpy
-matplotlib
-seaborn
-nltk
-emoji
-requests
-wordcloud
+pandas
 scikit-learn
-tensorflow
+joblib
+gdown
 sentence-transformers
+tensorflow==2.19.1
+keras==3.11.3
