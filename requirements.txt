@@ -5,4 +5,4 @@ scikit-learn
 joblib
 gdown
 sentence-transformers
-tensorflow==2.21.0
+tensorflow==2.15.0
