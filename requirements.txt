@@ -1,7 +1,11 @@
-gdown
-sentence-transformers
-scikit-learn
-streamlit
-numpy
 pandas
-joblib
+numpy
+matplotlib
+seaborn
+nltk
+emoji
+requests
+wordcloud
+scikit-learn
+tensorflow
+sentence-transformers
