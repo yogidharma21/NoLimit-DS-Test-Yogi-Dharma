@@ -1,7 +1,7 @@
 # DANA Sentiment Analysis
 ## Sentiment Classification & Semantic Similarity Engine
 
-> **NoLimit Indonesia — Data Scientist Hiring Assessment**  
+> **NoLimit Indonesia — Data Scientist Hiring Test**  
 > Submitted by: Yogi Dharma | Mathematics, Universitas Pendidikan Indonesia
 
 ---
