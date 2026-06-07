@@ -61,15 +61,15 @@ Clean Text (text_final)
 
 ## Model Architecture
 
-### Embedding Layer: `intfloat/multilingual-e5-large`
+### Embedding Layer: "paraphrase-multilingual-MiniLM-L12-v2"
 
 | Property | Value |
 |----------|-------|
-| Model | `intfloat/multilingual-e5-large` |
-| Embedding Dimension | 1024 |
-| Languages | 100+ (strong Indonesian support) |
-| Parameters | ~560M |
-| Max Sequence | 512 tokens |
+| Model | "paraphrase-multilingual-MiniLM-L12-v2" |
+| Embedding Dimension | 384 |
+| Languages | 50+ (strong Indonesian support) |
+| Parameters | ~118M |
+| Max Sequence | 256 tokens |
 
 ### Similarity Retrieval: KNN (Cosine)
 
